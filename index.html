@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>Angular-js-ng-repeat-ile-liste-icinde-donme by TEAandDevelopment</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>Angular-js-ng-repeat-ile-liste-icinde-donme</h1>
+        <h2>AngularJS kullanarak dizi içerisinde dönme, bunları ekrana yazdırma, ekleme ve silme işlemleri</h2>
+        <a href="https://github.com/TEAandDevelopment/angular-js-ng-repeat-ile-liste-icinde-donme" class="button"><small>View project on</small> GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <p>Öncelikle AngularJS kütüphanesini sayfamıza "head" tagının içindeki "title" tagının altına ekliyoruz.</p>
+
+<pre><code>&lt;head&gt;
+    &lt;title&gt;Talha Emin AYDEMİR :: AngularJS kullanarak dizi içerisinde dönme, bunları ekrana yazdırma, ekleme ve silme işlemleri&lt;/title&gt;
+    &lt;script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.2/angular.min.js"&gt;&lt;/script&gt;
+&lt;/head&gt;
+</code></pre>
+
+<p>"head" tagı yukarıdaki hali alıyor. AngularJS kütüphanesinden sonra kendi JavaScript kodlarımızı yazacağımız js dosyasını sayfamıza referans ediyoruz.
+Bu js dosyasının AngularJS kütüphanesinden sonra eklenmesi gerekmektedir. Aksi takdirde bozulmalar/çalışmamalar yaşanabilir.</p>
+
+<pre><code>&lt;head&gt;
+    &lt;title&gt;Talha Emin AYDEMİR :: AngularJS kullanarak dizi içerisinde dönme, bunları ekrana yazdırma, ekleme ve silme işlemleri&lt;/title&gt;
+    &lt;script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.2/angular.min.js"&gt;&lt;/script&gt;
+    &lt;script src="main.js"&gt;&lt;/script&gt;
+&lt;/head&gt;
+</code></pre>
+
+<p>"head" tagı bu hali aldıktan sonra app'imizi oluşturabiliriz.
+Bunun için öncelikle bir elemente "ng-app" attribute'ü ile app belirtmemiz gerekiyor. App içinde birden fazla <strong>controller</strong> barındırabildiği için ben app'i html elementine bağlıyorum.</p>
+
+<pre><code>&lt;html ng-app="teaApp"&gt;
+    &lt;head&gt;
+        &lt;title&gt;Talha Emin AYDEMİR :: AngularJS kullanarak dizi içerisinde dönme, bunları ekrana yazdırma, ekleme ve silme işlemleri&lt;/title&gt;
+    &lt;script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.2/angular.min.js"&gt;&lt;/script&gt;
+    &lt;script src="main.js"&gt;&lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+
+    &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p>Kodlarımızın son durumu bu oluyor. Burada html elementine verdiğim ng-app attribute'ünün değeri sizin app isminiz oluyor. Bu app üzerinden controller'lar directive'ler ekleyerek genişletiyorsunuz. Burada benim kullandığım "teaApp" kendi seçtiğim bir isim buraya kendi app isminizi girebilirsiniz. Burayı değiştirirken dikkat etmeniz gereken 3 şey var.</p>
+
+<ul>
+    <li>Burada app ismini değiştirdikten sonra yazacağımız js'deki app isimlerini de kendinize göre düzenleyin.</li>
+    <li>Birden fazla app kullanılacak projelerde bunların karışmaması ve çakışmamasına dikkat edin</li>
+    <li>App isimlendirmesi yaparken özel karekter($,#,_,-,? vs.), özel terimler(return, do, while, if vs.) ve Türkçe karekterler(ü,ş,İ,ç,ö vs.) kullanmamaya dikkat edin.</li>
+</ul>
+
+<p>Şimdi JavaScript tarafında app'imizi tanımlayalım. "main.js" isimli dosyayı açıp içerisine aşağıdaki kodu yazalım.</p>
+
+<pre><code>var app = angular.module("teaApp", []);
+</code></pre>
+
+<p>Burada app'i bir değişkene atıyoruz. İlk verdiğim parametre benim app ismimi. İkincideki boş dizi daha ileri de kullanacağınız route, angularfire tarzı şeyleri tanımlamanız için kullanılacak. Buradaki app değişkeni üzerinden controller, directive vs. eklemeleri gerçekleşiyor. O yüzden app değişkeninize iyi bakın.</p>
+
+<p>Şimdi controller tanımlamaya geçelim öncelikle bizim yapacağımız işlem basit olduğu için birden fazla controller kullanmayacağız. O yüzden ben controller'ımı body elementinde tanımlayacağım.</p>
+
+<pre><code>&lt;body ng-controller="teaCntrl"&gt;&lt;/body&gt;
+</code></pre>
+
+<p>body tagıma yukarıdaki gibi controller'ımı tanımladım. Buradaki teaCntrl benim controller ismim. Controller'ımın isminin sonundaki Cntrl benim değişkenimin controller olduğunu belirtmek için kullandım. Kullanılması zorunlu değil ama faydalı buluyorum.</p>
+
+<p>Controller'ı js tarafında tanımlamaya geçiyoruz. main.js dosyamızı açıp aşağıdaki satırı ekliyoruz.</p>
+
+<pre><code>app.controller("teaCntrl", function ($scope) {
+
+});
+</code></pre>
+
+<p>Burada app değişkenimize controller fonksiyonu ile controller ekliyoruz. İlk parametre app tanımlamadaki gibi controller ismi.
+İkinci parametre ise controller'ın ana fonksiyonu. Fonksiyonun aldığı $scope parametresi ise sabit bir parametredir. İsmi değiştirilmemelidir. Bu değişken size controller'ın scope'unu verir. Bu $scope üzerinde tanımladığınız değişken, fonksiyon vs şeylere html tarafında da ulaşabilirsiniz. </p>
+
+<p>Şimdi bizim eklediğimiz verilerin tutulacağı diziyi controller'ımızın içerisinde tanımlayalım.</p>
+
+<pre><code>app.controller("teaCntrl", function ($scope) {
+    $scope.Messages = [];
+});
+</code></pre>
+
+<p>Controller'ımız yukardaki gibi oldu. Şimdi bu diziye ekleme yapmak için html kodlarımızın içerisinde bir form oluşturmamız içerisine de bir buton ve input atmamız gerekiyor.
+Body elementinin içerisini aşağıdaki gibi dolduruyoruz.</p>
+
+<pre><code>&lt;form ng-submit="addMessage()"&gt;
+    &lt;input type="text" ng-model="NewMessage"&gt;
+    &lt;button type="submit"&gt;Ekle&lt;/button&gt;
+&lt;/form&gt;
+</code></pre>
+
+<p>Yukarıdaki kodda ng-submit attribute'ü bizim formumuzun submit ettiğinde vereceği tepki oluyor. Ben bu attribute'ün içerisini addMessage fonksiyonunu çağırarak doldurdum. Yani formumuz submit olduğunda bu fonksiyon çağıracak. Ama parametre göndermiyor. Peki veriler nasıl taşınacak?</p>
+
+<p>Sorunun cevabı şu şekilde oluyor. Input nesnesine verdiğim ng-model attribute'ü controller'ımın içerisindeki bir değişken olacak. ng-model çift taraflı binding oluyor. Yani ben inputa bir değer girdiğimde hiçbir şekilde hiçbirşey tetikletmesem bile controller'ımındaki değişkenin değeri değişiyor. addMessage fonksiyonundan da scope üzerindeki değişkenin değeri üzerinden işlem yapacağız. </p>
+
+<p>Şimdi controller'ımıza NewMessage değişkenini ve addMessage fonksiyonunu tanımlamaya başlayalım. Öncelikle aşağıdaki satırını buluyoruz.</p>
+
+<pre><code>$scope.Messages = [];
+</code></pre>
+
+<p>satırının altına aşağıdaki kodu ekleyelim.</p>
+
+<pre><code>$scope.NewMessage = "";
+
+$scope.addMessage = function () {
+    $scope.Messages.push($scope.NewMessage);
+    $scope.NewMessage = "";
+};
+</code></pre>
+
+<p>Burada ilk olarak eklenecek değeri değişken olarak tanımlıyoruz.
+Daha sonra scope üzerinde bir değere bir fonksiyonu atadık. Bu fonksiyon bizim controller'ımızın Messages dizisine push fonksiyonu ile değer ekliyor. Daha sonra da input'un temizlenmesi ve bir sonraki eklemede değerler birbirine girmemesi için değişkenin değerini temizliyoruz.</p>
+
+<p>Ekleme işlemini yaptık şimdi görüntülemeye geçelim. Aşağıdaki kodu body'nin içerisinde herhangi bir yere ekleyebilirsiniz.</p>
+
+<pre><code>&lt;ul&gt;
+    &lt;li ng-repeat="thsMessage in Messages"&gt;{{$index}}&amp;nbsp;&amp;nbsp;&amp;nbsp;:&amp;nbsp;&amp;nbsp;&amp;nbsp;{{thsMessage}}&amp;nbsp;&amp;nbsp;&amp;nbsp;:&lt;span ng-click="removeMessage($index)"&gt;Sil&lt;/span&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+
+<p>Buradaki ng-repeat foreach gibi bir döngü oluyor. {{$index}} değeri bize kaçıncı değeri basıyorsa onun indexini veriyor. Dikkat etmeniz gereken olay ise bu değer 0 dan başlar.
+{{thsMessage}} ise o anki Messages dizindeki elemanı veriyor. Span elementine atadığımız ng-click olayi isminden de anlaşıldığı gibi click eventi bağlamak için kullanılıyor. 
+Burada fonksiyona bir parametre gönderiyoruz. Burada parametre göndermeyi tercih etmemizin sebebi index değeri her li için farklı olmasıdır. Şimdi silme fonksiyonunu controller'ımızda addMessage fonksiyonun altına aşağıdaki gibi tanımlayalım.</p>
+
+<pre><code>$scope.removeMessage = function (Index) {
+    $scope.Messages.splice(Index, 1);
+};
+</code></pre>
+
+<p>Buradaki splice fonksiyonu ile gelen index değerindeki elemanı siliyoruz. </p>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/TEAandDevelopment/angular-js-ng-repeat-ile-liste-icinde-donme/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/TEAandDevelopment/angular-js-ng-repeat-ile-liste-icinde-donme/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/TEAandDevelopment/angular-js-ng-repeat-ile-liste-icinde-donme"></a> is maintained by <a href="https://github.com/TEAandDevelopment">TEAandDevelopment</a>.</p>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  
+  </body>
+</html>
