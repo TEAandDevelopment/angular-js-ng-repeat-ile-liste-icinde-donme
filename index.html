@@ -1,0 +1,22 @@
+<html ng-app="teaApp">
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.2/angular.min.js"></script>
+        <script src="main.js"></script>
+        <style>
+            .delete {
+                cursor:pointer;
+                font-weight:700
+            }
+        </style>
+    </head>
+    <body ng-controller="teaCntrl">
+        <form ng-submit="addMessage()">
+            <input type="text" ng-model="NewMessage">
+            <button type="submit">Ekle</button>
+        </form>
+
+        <ul>
+            <li ng-repeat="thsMessage in Messages">{{$index}}&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;{{thsMessage}}&nbsp;&nbsp;&nbsp;:<span class="delete" ng-click="removeMessage($index)">Sil</span></li>
+        </ul>
+    </body>
+</html>
